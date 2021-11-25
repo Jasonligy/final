@@ -51,14 +51,27 @@ def detect():
         convexhull = cv2.convexHull(points)
         contour=createcontour(rect)
         print(contour)
-        for m in range(rect.top(), rect.bottom()):
-            for n in range(rect.left(), rect.right()):
+        for m in range(rect.top()+2, rect.bottom()-2):
+            for n in range(rect.left()+2, rect.right()-2):
                 if(cv2.pointPolygonTest(convexhull, (n,m), False)==1):
-                    (b, g, r) = image[m, n]
-                    newb=155-b
-                    newg=183-g
-                    newr=240-r
-                    image[m, n]=(b+0.8*newb,g+0.8*newg,r+0.8*newr)
+                    sum = [0, 0, 0]
+                    for x in range(-2,3):
+
+                        for y in range(-2, 3):
+                            sum[0]+=list(image[m+x,n+y])[0]
+                            sum[1] += list(image[m + x, n + y])[1]
+                            sum[2] += list(image[m + x, n + y])[2]
+                    sum[0]//=25
+                    sum[1]//= 25
+                    sum[2] //=25
+                    # print(sum)
+                    image[m,n]=tuple(sum)
+#                 if(cv2.pointPolygonTest(convexhull, (n,m), False)==1):
+#                     (b, g, r) = image[m, n]
+#                     newb=155-b
+#                     newg=183-g
+#                     newr=240-r
+#                     image[m, n]=(b+0.8*newb,g+0.8*newg,r+0.8*newr)
 
                     # if m % 5 == 0 and n % 5==0:
                     #     for i in range(5):
